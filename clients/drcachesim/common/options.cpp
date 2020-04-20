@@ -218,9 +218,27 @@ droption_t<bytesize_t> op_trace_after_instrs(
     DROPTION_SCOPE_CLIENT, "trace_after_instrs", 0,
     "Do not start tracing until N instructions",
     "If non-zero, this causes tracing to be suppressed until this many dynamic "
-    "instruction "
-    "executions are observed.  At that point, regular tracing is put into place.  Use "
-    "-max_trace_size to set a limit on the subsequent trace length.");
+    "instruction executions are observed from the start of the application. "
+    "At that point, regular tracing is put into place.  Use "
+    "-trace_for_instrs or -max_trace_size to set a limit on the subsequent trace "
+    "length.  Use -retrace_every_instrs to trace repeatedly.");
+
+droption_t<bytesize_t> op_trace_for_instrs(
+    DROPTION_SCOPE_CLIENT, "trace_for_instrs", 0,
+    "After tracing N instructions, stop tracing, but continue executing.",
+    "If non-zero, this stops recording a trace after the specified number of "
+    "instructions are traced.  Unlike -exit_after_tracing, which kills the "
+    "application (and counts data as well as instructions), the application "
+    "continues executing.  This can be combined with -retrace_every_instrs.");
+
+droption_t<bytesize_t> op_retrace_every_instrs(
+    DROPTION_SCOPE_CLIENT, "retrace_every_instrs", 0,
+    "Trace for -trace_for_instrs, execute this many, and repeat.",
+    "This option augment -trace_for_instrs.  After tracing concludes, this option "
+    "causes non-traced instructions to be counted and after the number specified by "
+    "this option, tracing start up again for the -trace_for_instrs duration.  This "
+    "process repeats itself.  This can be combined with -trace_after_instrs for an "
+    "initial period of non-tracing.");
 
 droption_t<bytesize_t> op_exit_after_tracing(
     DROPTION_SCOPE_CLIENT, "exit_after_tracing", 0,
